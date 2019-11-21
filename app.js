@@ -1,7 +1,7 @@
 const game = () => {
   let pScore = 0;
   let cScore = 0;
-
+  let rdelay = 0;
   /*
    **    START THE GAME
    */
@@ -39,19 +39,31 @@ const game = () => {
         const computerNumber = Math.round(Math.random() * 2);
         const computerChoice = computerOptions[computerNumber];
 
+        if (this.textContent != "reset") {
+          rdelay = 2000;
+        } else {
+          rdelay = 0;
+        }
         setTimeout(() => {
           //Call Your Compare Hands
 
           compareHands(this.textContent, computerChoice);
 
           //update Images
-          playerHand.src = `./assets/${this.textContent}.png`;
-          computerHand.src = `./assets/${computerChoice}.png`;
-        }, 2000);
+          if (this.textContent != "reset") {
+            playerHand.src = `./assets/${this.textContent}.png`;
+            computerHand.src = `./assets/${computerChoice}.png`;
+          } else {
+            playerHand.src = `./assets/rock.png`;
+            computerHand.src = `./assets/rock.png`;
+          }
+        }, rdelay);
 
         //Animation
-        playerHand.style.animation = "shakePlayer 2s ease";
-        computerHand.style.animation = "shakeComputer 2s ease";
+        if (this.textContent != "reset") {
+          playerHand.style.animation = "shakePlayer 2s ease";
+          computerHand.style.animation = "shakeComputer 2s ease";
+        }
       });
     });
   };
@@ -110,6 +122,12 @@ const game = () => {
         updateScore();
         return;
       }
+    }
+    if (playerChoice === "reset") {
+      pScore = 0;
+      cScore = 0;
+      updateScore();
+      return;
     }
   };
 
